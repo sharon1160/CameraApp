@@ -1,4 +1,4 @@
-package com.example.cameraapp
+package com.example.cameraapp.view.ui
 
 import android.os.Bundle
 import androidx.activity.ComponentActivity
