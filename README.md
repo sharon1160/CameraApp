@@ -1,5 +1,7 @@
 # CameraApp
 
+Camera app using Compose. Use compose elements, along with accompanist and Jetpack libraries.
+
 ## Getting Started :rocket:
 
 1. We clone the repository.
