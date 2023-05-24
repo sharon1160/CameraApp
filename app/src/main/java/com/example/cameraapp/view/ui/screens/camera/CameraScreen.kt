@@ -1,5 +1,6 @@
 package com.example.cameraapp.view.ui.screens.camera
 
+import android.content.Context
 import android.util.Log
 import androidx.camera.core.CameraSelector
 import androidx.camera.core.ImageCapture
@@ -22,6 +23,7 @@ import androidx.compose.ui.viewinterop.AndroidView
 import androidx.core.content.ContextCompat
 import com.example.cameraapp.R
 import com.example.cameraapp.viewmodel.CameraViewModel
+import kotlin.reflect.KFunction2
 
 @Composable
 fun CameraScreen(cameraViewModel: CameraViewModel) {
@@ -37,7 +39,7 @@ fun CameraScreen(cameraViewModel: CameraViewModel) {
 }
 
 @Composable
-fun Camera(_imageCapture: ImageCapture?, takePhoto: (ImageCapture) -> Unit) {
+fun Camera(_imageCapture: ImageCapture?, takePhoto: KFunction2<ImageCapture, Context, Unit>) {
     var imageCapture = _imageCapture
     val lifecycleOwner = LocalLifecycleOwner.current
     val context = LocalContext.current
@@ -83,7 +85,7 @@ fun Camera(_imageCapture: ImageCapture?, takePhoto: (ImageCapture) -> Unit) {
                 .fillMaxWidth()
         ) {
             androidx.compose.material.Button(
-                onClick = { imageCapture?.let { takePhoto(it) } },
+                onClick = { imageCapture?.let { takePhoto(it, context) } },
                 modifier = Modifier.align(Alignment.Center)
             ) {
                 Text("TAKE PHOTO")
