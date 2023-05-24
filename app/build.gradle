@@ -48,6 +48,7 @@ android {
 
 dependencies {
     implementation 'androidx.appcompat:appcompat:1.6.1'
+    implementation 'com.google.android.gms:play-services-location:21.0.1'
     def camerax_version = "1.2.0"
     implementation 'androidx.core:core-ktx:1.7.0'
     implementation 'androidx.lifecycle:lifecycle-runtime-ktx:2.3.1'
@@ -71,4 +72,7 @@ dependencies {
     implementation "androidx.camera:camera-camera2:${camerax_version}"
     implementation "androidx.camera:camera-view:${camerax_version}"
     implementation "androidx.camera:camera-lifecycle:${camerax_version}"
+
+    implementation 'com.google.maps.android:maps-compose:1.0.0'
+    implementation 'com.google.android.gms:play-services-maps:17.0.0'
 }
