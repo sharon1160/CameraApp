@@ -4,6 +4,7 @@ import android.net.Uri
 import android.util.Log
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
+import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.lazy.grid.*
 import androidx.compose.material3.*
@@ -16,13 +17,12 @@ import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.res.colorResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
-import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import androidx.navigation.NavHostController
 import coil.compose.rememberAsyncImagePainter
 import com.example.cameraapp.R
 import com.example.cameraapp.model.Photo
-import com.example.cameraapp.view.ui.theme.CameraAppTheme
 import com.example.cameraapp.viewmodel.GalleryViewModel
 import com.google.accompanist.permissions.ExperimentalPermissionsApi
 import com.google.accompanist.permissions.rememberMultiplePermissionsState
@@ -37,7 +37,7 @@ val data: List<Photo> = listOf(
 )
 
 @Composable
-fun GalleryScreen(galleryViewModel: GalleryViewModel) {
+fun GalleryScreen(galleryViewModel: GalleryViewModel, navController: NavHostController) {
     val state by galleryViewModel.uiState.collectAsState()
     Box {
         Column(
@@ -45,7 +45,7 @@ fun GalleryScreen(galleryViewModel: GalleryViewModel) {
                 .fillMaxSize()
                 .background(colorResource(id = R.color.teal_700))
         ) {
-            PhotosGrid(state.photosList)
+            PhotosGrid(state.photosList, navController)
         }
         Permissions(galleryViewModel::loadPhotos)
     }
@@ -54,7 +54,7 @@ fun GalleryScreen(galleryViewModel: GalleryViewModel) {
 }
 
 @Composable
-fun ImageCard(photo: Photo) {
+fun ImageCard(photo: Photo, navController: NavHostController) {
     Card(
         shape = MaterialTheme.shapes.small,
         modifier = Modifier
@@ -62,7 +62,13 @@ fun ImageCard(photo: Photo) {
             .width(180.dp)
     ) {
         Image(
-            modifier = Modifier.fillMaxSize(),
+            modifier = Modifier
+                .fillMaxSize()
+                .clickable {
+                    navController.navigate(
+                        route = "detail/${Uri.encode(photo.image.toString())}"
+                    )
+                },
             painter = rememberAsyncImagePainter(photo.image),
             contentDescription = null,
             contentScale = ContentScale.Crop,
@@ -71,7 +77,7 @@ fun ImageCard(photo: Photo) {
 }
 
 @Composable
-fun PhotosGrid(photosList: List<Photo>) {
+fun PhotosGrid(photosList: List<Photo>, navController: NavHostController) {
     if (photosList.isNotEmpty()) {
         LazyVerticalGrid(
             columns = GridCells.Fixed(2),
@@ -82,11 +88,11 @@ fun PhotosGrid(photosList: List<Photo>) {
             photosList.forEachIndexed { index, photo ->
                 if (index % 3 == 0) {
                     item(span = { GridItemSpan(maxLineSpan) }) {
-                        ImageCard(photo)
+                        ImageCard(photo, navController)
                     }
                 } else {
                     item(span = { GridItemSpan(1) }) {
-                        ImageCard(photo)
+                        ImageCard(photo, navController)
                     }
                 }
             }
@@ -120,6 +126,8 @@ fun Permissions(loadPhotos: () -> Unit) {
         android.Manifest.permission.READ_EXTERNAL_STORAGE,
         android.Manifest.permission.CAMERA,
         android.Manifest.permission.WRITE_EXTERNAL_STORAGE,
+        android.Manifest.permission.ACCESS_FINE_LOCATION,
+        android.Manifest.permission.ACCESS_COARSE_LOCATION
     )
     val permissionsState = rememberMultiplePermissionsState(permissions = permissions)
     LaunchedEffect(key1 = Unit) {
@@ -164,13 +172,5 @@ fun RationaleDialog(show: Boolean, onConfirm: () -> Unit, onDismiss: () -> Unit)
                 )
             }
         )
-    }
-}
-
-@Preview(showBackground = true)
-@Composable
-fun DefaultPreview() {
-    CameraAppTheme {
-        PhotosGrid(data)
     }
 }
