@@ -8,6 +8,7 @@ import androidx.compose.material3.Scaffold
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.unit.dp
 import androidx.navigation.NavHostController
@@ -21,8 +22,8 @@ import com.google.maps.android.compose.rememberCameraPositionState
 
 @Composable
 fun DetailScreen(detailViewModel: DetailViewModel, navController: NavHostController, Image: Uri) {
-    Scaffold() {
-        PhotoMap(detailViewModel.loadLocation(Image), )
+    Scaffold {
+        PhotoMap(detailViewModel.loadLocation(Image))
         BackButton(navController)
     }
 }
@@ -41,7 +42,8 @@ fun BackButton(navController: NavHostController) {
                 contentDescription = null,
                 modifier = Modifier
                     .width(50.dp)
-                    .height(50.dp)
+                    .height(50.dp),
+                tint = Color.Black,
             )
         }
     }
