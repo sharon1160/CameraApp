@@ -15,34 +15,51 @@ fun NavigationBar(navController: NavController) {
         NavigationItem.Gallery,
         NavigationItem.Camera
     )
-    BottomNavigation (
-        backgroundColor = MaterialTheme.colorScheme.onPrimary,
-        contentColor = MaterialTheme.colorScheme.onSecondaryContainer
-    ) {
-        val navBackStackEntry by navController.currentBackStackEntryAsState()
-        val currentRoute = navBackStackEntry?.destination?.route
-        items.forEach { item ->
-            BottomNavigationItem(
-                icon = { Icon(painterResource(id = item.icon), contentDescription = item.title) },
-                label = { Text(text = item.title,
-                    fontSize = 9.sp) },
-                selectedContentColor = MaterialTheme.colorScheme.onSecondaryContainer,
-                unselectedContentColor = MaterialTheme.colorScheme.onSecondaryContainer.copy(0.4f),
-                alwaysShowLabel = true,
-                selected = currentRoute == item.screen_route,
-                onClick = {
-                    navController.navigate(item.screen_route) {
 
-                        navController.graph.startDestinationRoute?.let { screen_route ->
-                            popUpTo(screen_route) {
-                                saveState = true
+    val showBottomBar = navController
+        .currentBackStackEntryAsState().value?.destination?.route in items.map { it.screen_route }
+
+    if (showBottomBar) {
+        BottomNavigation(
+            backgroundColor = MaterialTheme.colorScheme.onPrimary,
+            contentColor = MaterialTheme.colorScheme.onSecondaryContainer
+        ) {
+            val navBackStackEntry by navController.currentBackStackEntryAsState()
+            val currentRoute = navBackStackEntry?.destination?.route
+            items.forEach { item ->
+                BottomNavigationItem(
+                    icon = {
+                        Icon(
+                            painterResource(id = item.icon),
+                            contentDescription = item.title
+                        )
+                    },
+                    label = {
+                        Text(
+                            text = item.title,
+                            fontSize = 9.sp
+                        )
+                    },
+                    selectedContentColor = MaterialTheme.colorScheme.onSecondaryContainer,
+                    unselectedContentColor = MaterialTheme.colorScheme.onSecondaryContainer.copy(
+                        0.4f
+                    ),
+                    alwaysShowLabel = true,
+                    selected = currentRoute == item.screen_route,
+                    onClick = {
+                        navController.navigate(item.screen_route) {
+
+                            navController.graph.startDestinationRoute?.let { screen_route ->
+                                popUpTo(screen_route) {
+                                    saveState = true
+                                }
                             }
+                            launchSingleTop = true
+                            restoreState = true
                         }
-                        launchSingleTop = true
-                        restoreState = true
                     }
-                }
-            )
+                )
+            }
         }
     }
 }
