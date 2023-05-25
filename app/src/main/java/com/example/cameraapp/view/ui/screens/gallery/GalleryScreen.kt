@@ -71,7 +71,7 @@ fun PhotosGrid(photosList: List<Photo>, navController: NavHostController) {
             columns = GridCells.Fixed(2),
             horizontalArrangement = Arrangement.spacedBy(8.dp),
             verticalArrangement = Arrangement.spacedBy(8.dp),
-            contentPadding = PaddingValues(8.dp)
+            contentPadding = PaddingValues(start= 8.dp, end=8.dp, top= 8.dp, bottom = 100.dp)
         ) {
             photosList.forEachIndexed { index, photo ->
                 if (index % 3 == 0) {
