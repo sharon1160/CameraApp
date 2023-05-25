@@ -12,29 +12,17 @@ import androidx.compose.runtime.*
 import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.layout.ContentScale
-import androidx.compose.ui.res.colorResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.navigation.NavHostController
 import coil.compose.rememberAsyncImagePainter
-import com.example.cameraapp.R
 import com.example.cameraapp.model.Photo
 import com.example.cameraapp.viewmodel.GalleryViewModel
 import com.google.accompanist.permissions.ExperimentalPermissionsApi
 import com.google.accompanist.permissions.rememberMultiplePermissionsState
-
-private const val PACKAGE_NAME = "com.example.cameraapp"
-const val URI_RSC = "android.resource://$PACKAGE_NAME/"
-val data: List<Photo> = listOf(
-    Photo(Uri.parse("$URI_RSC${R.drawable.cat_img}"), "no location"),
-    Photo(Uri.parse("$URI_RSC${R.drawable.cat_img}"), "no location"),
-    Photo(Uri.parse("$URI_RSC${R.drawable.cat_img}"), "no location"),
-    Photo(Uri.parse("$URI_RSC${R.drawable.cat_img}"), "no location"),
-)
 
 @Composable
 fun GalleryScreen(galleryViewModel: GalleryViewModel, navController: NavHostController) {
@@ -43,7 +31,7 @@ fun GalleryScreen(galleryViewModel: GalleryViewModel, navController: NavHostCont
         Column(
             modifier = Modifier
                 .fillMaxSize()
-                .background(colorResource(id = R.color.teal_700))
+                .background(MaterialTheme.colorScheme.background)
         ) {
             PhotosGrid(state.photosList, navController)
         }
@@ -101,13 +89,13 @@ fun PhotosGrid(photosList: List<Photo>, navController: NavHostController) {
         Column(
             modifier = Modifier
                 .fillMaxSize()
-                .background(colorResource(id = R.color.teal_700))
+                .background(MaterialTheme.colorScheme.background)
                 .wrapContentSize(Alignment.Center)
         ) {
             androidx.compose.material.Text(
                 text = "No photos",
-                fontWeight = FontWeight.Bold,
-                color = Color.White,
+                fontWeight = FontWeight.Light,
+                color = MaterialTheme.colorScheme.onBackground,
                 modifier = Modifier.align(Alignment.CenterHorizontally),
                 textAlign = TextAlign.Center,
                 fontSize = 20.sp
